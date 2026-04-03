@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+actor Mahasiswa
+
+rectangle "Student Task Tracker" {
+  usecase "Melakukan Autentikasi" as UC1
+  usecase "Register" as UC2
+  usecase "Login" as UC3
+}
+
+Mahasiswa --> UC1
+UC1 <.. UC2 : <<extend>>
+UC1 ..> UC3 : <<include>>
+@enduml
