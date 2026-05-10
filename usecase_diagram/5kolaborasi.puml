@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+actor Mahasiswa
+
+rectangle "Student Task Tracker" {
+  usecase "Mengelola Kolaborasi Tugas" as UC1
+  usecase "Import Tugas via Kode" as UC2
+  usecase "Generate Kode Tugas" as UC3
+}
+
+Mahasiswa --> UC1
+UC1 <.. UC2 : <<extend>>
+UC1 <.. UC3 : <<extend>>
+@enduml
