@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// 1. Fitur: Melakukan Autentikasi
+model User {
+  id             String             @id @default(uuid())
+  username       String
+  email          String             @unique
+  password       String
+  createdAt      DateTime           @default(now())
+  
+  tasks          Task[]
+  focusSessions  FocusSession[]
+  collaborations TaskCollaborator[]
+}
+
+// 2. Fitur: Melihat Daftar Prioritas Tugas (Tabel Master)
+model Priority {
+  id          Int      @id @default(autoincrement())
+  name        String   // "High", "Medium", "Low"
+  colorCode   String?  // Misal: #FF0000 untuk High
+  
+  tasks       Task[]
+}
+
+// 3. Fitur: Mengelola Data Tugas
+model Task {
+  id             String    @id @default(uuid())
+  title          String
+  description    String?
+  status         String    @default("Todo") // Todo, In_Progress, Done
+  dueDate        DateTime?
+  
+  // Custom Label (Kustomisasi Mahasiswa ada di sini)
+  customLabel    String?   // Contoh: "Dikerjakan nanti malam"
+  
+  // Kode Tugas untuk Fitur Kolaborasi
+  taskCode       String    @unique @default(uuid())
+  createdAt      DateTime  @default(now())
+
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+
+  priorityId     Int
+  priority       Priority  @relation(fields: [priorityId], references: [id])
+
+  focusSessions  FocusSession[]
+  collaborators  TaskCollaborator[]
+}
+
+// 4. Fitur: Menggunakan Focus Mode
+model FocusSession {
+  id             String    @id @default(uuid())
+  duration       Int       // Dalam menit
+  startTime      DateTime
+  endTime        DateTime
+  createdAt      DateTime  @default(now())
+
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+
+  taskId         String?
+  task           Task?     @relation(fields: [taskId], references: [id])
+}
+
+// 5. Fitur: Mengelola Kolaborasi Tugas
+model TaskCollaborator {
+  id             String    @id @default(uuid())
+  joinedAt       DateTime  @default(now())
+
+  taskId         String
+  task           Task      @relation(fields: [taskId], references: [id])
+
+  userId         String
+  user           User      @relation(fields: [userId], references: [id])
+}
