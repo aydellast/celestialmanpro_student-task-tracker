@@ -46,10 +46,12 @@ model Task {
 
   dueDate        DateTime?
 
-  // Custom Label
+  // SMART PRIORITY
+  sks            Int
+  difficulty     Int
+
   customLabel    String?
 
-  // Kode untuk kolaborasi
   taskCode       String        @unique @default(uuid())
 
   createdAt      DateTime      @default(now())

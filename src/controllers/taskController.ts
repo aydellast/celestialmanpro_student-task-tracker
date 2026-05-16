@@ -2,6 +2,7 @@ import { Response } from "express";
 
 import prisma from "../prisma/client";
 import { AuthRequest } from "../middlewares/authMiddleware";
+import { determinePriority } from "../utils/priority";
 
 // ======================
 // CREATE TASK
@@ -16,23 +17,42 @@ export const createTask = async (
       description,
       dueDate,
       customLabel,
-      priorityId,
+      sks,
+      difficulty,
     } = req.body;
 
     // Validasi
-    if (!title || !priorityId) {
+    if (
+      !title ||
+      !dueDate ||
+      !sks ||
+      !difficulty
+    ) {
       return res.status(400).json({
-        message: "Title and priority are required",
+        message:
+          "Title, dueDate, sks, and difficulty are required",
       });
     }
+
+    // PRIORITY OTOMATIS
+    const priorityId = determinePriority(
+      new Date(dueDate),
+      Number(sks),
+      Number(difficulty)
+    );
 
     const task = await prisma.task.create({
       data: {
         title,
         description,
-        dueDate: dueDate ? new Date(dueDate) : null,
+        dueDate: new Date(dueDate),
         customLabel,
+
+        sks: Number(sks),
+        difficulty: Number(difficulty),
+
         priorityId,
+
         userId: req.user!.userId,
       },
 
@@ -73,9 +93,14 @@ export const getTasks = async (
         focusSessions: true,
       },
 
-      orderBy: {
-        createdAt: "desc",
-      },
+      orderBy: [
+        {
+          priorityId: "asc",
+        },
+        {
+          dueDate: "asc",
+        },
+      ],
     });
 
     res.status(200).json({
@@ -159,7 +184,8 @@ export const updateTask = async (
       status,
       dueDate,
       customLabel,
-      priorityId,
+      sks,
+      difficulty,
     } = req.body;
 
     // Pastikan task milik user
@@ -176,6 +202,13 @@ export const updateTask = async (
       });
     }
 
+    // PRIORITY OTOMATIS SAAT UPDATE
+    const priorityId = determinePriority(
+      new Date(dueDate),
+      Number(sks),
+      Number(difficulty)
+    );
+
     const updatedTask = await prisma.task.update({
       where: {
         id,
@@ -185,8 +218,15 @@ export const updateTask = async (
         title,
         description,
         status,
-        dueDate: dueDate ? new Date(dueDate) : null,
+        dueDate: dueDate
+          ? new Date(dueDate)
+          : null,
+
         customLabel,
+
+        sks: Number(sks),
+        difficulty: Number(difficulty),
+
         priorityId,
       },
 
@@ -232,6 +272,21 @@ export const deleteTask = async (
       });
     }
 
+    // Hapus collaborator dulu
+    await prisma.taskCollaborator.deleteMany({
+      where: {
+        taskId: id,
+      },
+    });
+
+    // Hapus focus session dulu
+    await prisma.focusSession.deleteMany({
+      where: {
+        taskId: id,
+      },
+    });
+
+    // Baru hapus task
     await prisma.task.delete({
       where: {
         id,

@@ -4,6 +4,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import taskRoutes from "./routes/taskRoutes";
 import focusRoutes from "./routes/focusRoutes";
+import collaborationRoutes from "./routes/collaborationRoutes";
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/focus", focusRoutes);
+app.use("/api/collaboration", collaborationRoutes);
 
 // Test Route
 app.get("/", (req, res) => {
