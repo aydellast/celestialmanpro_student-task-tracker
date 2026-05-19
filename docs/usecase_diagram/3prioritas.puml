@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+actor Mahasiswa
+
+rectangle "Student Task Tracker" {
+  usecase "Melihat Daftar Prioritas Tugas" as UC1
+}
+
+Mahasiswa --> UC1
+@enduml
