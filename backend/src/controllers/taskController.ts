@@ -83,9 +83,21 @@ export const getTasks = async (
 ) => {
   try {
     const tasks = await prisma.task.findMany({
-      where: {
+  where: {
+    OR: [
+      {
         userId: req.user!.userId,
       },
+
+      {
+        collaborators: {
+          some: {
+            userId: req.user!.userId,
+          },
+        },
+      },
+    ],
+  },
 
       include: {
         priority: true,
