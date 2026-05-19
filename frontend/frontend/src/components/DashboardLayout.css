@@ -1,0 +1,174 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --primary-blue: #a3c7f7; /* Warna biru muda sesuai desainmu */
+  --dark-text: #333333;
+  --gray-bg: #f5f7fb;
+}
+
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background-color: var(--gray-bg);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+/* --- SIDEBAR STYLING (Desktop) --- */
+.sidebar {
+  width: 260px;
+  background-color: white;
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar-brand {
+  padding-bottom: 30px;
+  border-bottom: 2px solid var(--gray-bg);
+  color: #4a90e2;
+}
+
+.sidebar-menu {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 12px 15px;
+  color: var(--dark-text);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.menu-item:hover, .menu-item.active {
+  background-color: var(--primary-blue);
+  color: white;
+  font-weight: bold;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* --- MAIN CONTENT & NAVBAR --- */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-bottom: 60px; /* Jaga jarak aman untuk bottom nav di mobile */
+}
+
+.navbar-top {
+  height: 70px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar-title {
+  color: var(--dark-text);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.avatar {
+  width: 35px;
+  height: 35px;
+  background-color: #4a90e2;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.page-body {
+  padding: 30px;
+  flex: 1;
+}
+
+/* --- BOTTOM NAV STYLING (Mobile) --- */
+.bottom-nav {
+  display: none; /* Default sembunyi di komputer */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 65px;
+  background-color: white;
+  border-top: 1px solid #e0e0e0;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 100;
+}
+
+.bottom-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #777;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.bottom-item.active {
+  color: #4a90e2;
+  font-weight: bold;
+}
+
+.bottom-icon {
+  font-size: 20px;
+}
+
+/* --- RESPONSIVE BREAKPOINT (Aturan Layar HP) --- */
+@media (max-width: 768px) {
+  .sidebar {
+    display: none; /* Sembunyikan sidebar di HP */
+  }
+
+  .bottom-nav {
+    display: flex; /* Munculkan navigasi bawah di HP */
+  }
+
+  .navbar-top {
+    padding: 0 15px;
+    background-color: var(--primary-blue); /* Buat navbar atas biru sesuai desain */
+  }
+
+  .navbar-title {
+    color: white;
+  }
+
+  .page-body {
+    padding: 15px;
+  }
+}

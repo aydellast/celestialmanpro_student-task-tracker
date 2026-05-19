@@ -1,0 +1,146 @@
+/* Container Utama untuk simulasi layar HP/Mockup */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card Ponsel seperti di UI/UX */
+.login-card {
+  background: #ffffff;
+  width: 360px;
+  min-height: 740px;
+  padding: 40px 24px;
+  border-radius: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+/* Styling Judul Atas */
+.main-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #000000;
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.sub-title {
+  font-size: 13px;
+  color: #555555;
+  margin-top: 8px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* Container Gambar Bulat */
+.image-container {
+  width: 260px;
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.ui-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Form Layout */
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 6px;
+}
+
+/* Label Input */
+.input-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+  text-align: left;
+  padding-left: 8px;
+}
+
+/* Efek Input Oval + Shadow Lembut */
+.custom-input {
+  width: 100%;
+  height: 48px;
+  background: #e2edfd;
+  border: 1px solid #b9d5ff;
+  border-radius: 25px;
+  padding: 0 20px;
+  font-size: 14px;
+  box-sizing: border-box;
+  color: #333333;
+  outline: none;
+  /* Bayangan bawah khas UI/UX */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+  transition: all 0.3s ease;
+}
+
+.custom-input::placeholder {
+  color: #999999;
+}
+
+.custom-input:focus {
+  border-color: #70a1ff;
+  box-shadow: 0 4px 15px rgba(112, 161, 255, 0.3);
+}
+
+/* Tombol Masuk Gradasi + Shadow */
+.btn-masuk {
+  width: 100%;
+  height: 48px;
+  background: linear-gradient(180deg, #91bbf4 0%, #689ee3 100%);
+  color: #000000;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0 6px 16px rgba(104, 158, 227, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-masuk:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(104, 158, 227, 0.5);
+}
+
+.btn-masuk:active {
+  transform: translateY(1px);
+}
+
+/* Teks Footer Bawah */
+.footer-text {
+  font-size: 12px;
+  color: #444444;
+  margin-top: 24px;
+}
+
+.link-daftar {
+  color: #3882e4;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}

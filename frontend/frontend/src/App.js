@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import DashboardLayout from './components/DashboardLayout';
+import Home from './components/Home';
+import Kolaborasi from './components/Kolaborasi'; // Pastikan file Kolaborasi.js sudah ada
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Rute untuk halaman autentikasi awal */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/* Rute utama Dashboard menggunakan Layout khusus */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          {/* Halaman Kalender (Home) otomatis muncul pertama kali saat ke /dashboard */}
+          <Route index element={<Home />} />
+          
+          {/* Halaman tugas kelompok aksesnya lewat /dashboard/kolaborasi */}
+          <Route path="kolaborasi" element={<Kolaborasi />} />
+        </Route>
+
+        {/* Jika user mengakses halaman selain di atas, otomatis diarahkan ke login */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </Router>
   );
 }
 
