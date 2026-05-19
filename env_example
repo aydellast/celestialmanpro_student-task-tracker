@@ -1,0 +1,1 @@
+DATABASE_URL="mysql://root:@localhost:3306/dbstudent_task_tracker"
