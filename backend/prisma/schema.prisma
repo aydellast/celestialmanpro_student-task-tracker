@@ -25,6 +25,7 @@ model User {
   tasks          Task[]
   focusSessions  FocusSession[]
   collaborations TaskCollaborator[]
+  checklistsDone TaskChecklist[]
 }
 
 // 2. Fitur: Melihat Daftar Prioritas Tugas (Tabel Master)
@@ -64,6 +65,7 @@ model Task {
 
   focusSessions  FocusSession[]
   collaborators  TaskCollaborator[]
+  checklists TaskChecklist[]
 }
 
 // 4. Fitur: Menggunakan Focus Mode
@@ -91,4 +93,17 @@ model TaskCollaborator {
 
   userId         String
   user           User      @relation(fields: [userId], references: [id])
+}
+
+model TaskChecklist {
+  id        String   @id @default(uuid())
+  title     String
+  isDone    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id])
+
+  doneById  String?
+  doneBy    User?    @relation(fields: [doneById], references: [id])
 }

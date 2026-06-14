@@ -1,38 +1,48 @@
-// ========================================
-// FILE: src/pages/RegisterPage.jsx
-// ========================================
-
 import {
   useState,
 } from "react";
 
 import {
-  Link,
+  BsRocketTakeoff,
+} from "react-icons/bs";
+
+import {
   useNavigate,
+  Link,
 } from "react-router-dom";
+
+import logo from "../assets/logo.png";
 
 import {
   registerUser,
 } from "../services/authService";
 
+import "../styles/auth.css";
+
 function RegisterPage() {
+
   const navigate =
     useNavigate();
 
-  const [username, setUsername] =
+  const [username,
+    setUsername] =
     useState("");
 
-  const [email, setEmail] =
+  const [email,
+    setEmail] =
     useState("");
 
-  const [password, setPassword] =
+  const [password,
+    setPassword] =
     useState("");
 
   const handleRegister =
     async (e) => {
+
       e.preventDefault();
 
       try {
+
         await registerUser(
           username,
           email,
@@ -40,66 +50,139 @@ function RegisterPage() {
         );
 
         alert(
-          "Register berhasil"
+          "Register berhasil 🚀"
         );
 
-        navigate("/");
+        navigate("/login");
+
       } catch (error) {
-        alert("Register gagal");
+
+        console.log(error);
+
+        alert(
+          "Register gagal"
+        );
+
       }
     };
 
   return (
-    <div className="container">
-      <h1>Register</h1>
 
-      <form
-        onSubmit={handleRegister}
-      >
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) =>
-            setUsername(
-              e.target.value
-            )
+    <div className="auth-container">
+
+      <div className="auth-card">
+
+        {/* HEADER */}
+
+        <div className="auth-header">
+
+          <img
+            src={logo}
+            alt="Logo"
+            className="auth-logo"
+          />
+
+          <h1>
+            Student Task Tracker
+          </h1>
+
+          <p>
+            Turn Chaos Into Clarity
+          </p>
+
+          <p>
+            by Celestial Team
+          </p>
+
+          <span className="auth-subtitle">
+            <BsRocketTakeoff />
+            Create your account
+          </span>
+
+        </div>
+
+        {/* FORM */}
+
+        <form
+          onSubmit={
+            handleRegister
           }
-        />
 
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) =>
-            setEmail(
-              e.target.value
-            )
-          }
-        />
+          className="auth-form"
+        >
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) =>
-            setPassword(
-              e.target.value
-            )
-          }
-        />
+          <input
+            type="text"
 
-        <button type="submit">
-          Register
-        </button>
-      </form>
+            placeholder="Username"
 
-      <p>
-        Sudah punya akun?
-        <Link to="/">
-          Login
-        </Link>
-      </p>
+            value={username}
+
+            onChange={(e) =>
+              setUsername(
+                e.target.value
+              )
+            }
+
+            required
+          />
+
+          <input
+            type="email"
+
+            placeholder="Email"
+
+            value={email}
+
+            onChange={(e) =>
+              setEmail(
+                e.target.value
+              )
+            }
+
+            required
+          />
+
+          <input
+            type="password"
+
+            placeholder="Password"
+
+            value={password}
+
+            onChange={(e) =>
+              setPassword(
+                e.target.value
+              )
+            }
+
+            required
+          />
+
+          <button type="submit">
+
+            Register
+
+          </button>
+
+        </form>
+
+        {/* FOOTER */}
+
+        <div className="auth-footer">
+
+          <p>
+            Sudah punya akun?
+          </p>
+
+          <Link to="/login">
+            Login sekarang
+          </Link>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

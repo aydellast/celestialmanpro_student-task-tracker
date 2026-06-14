@@ -3,9 +3,6 @@ import { Response } from "express";
 import prisma from "../prisma/client";
 import { AuthRequest } from "../middlewares/authMiddleware";
 
-// ======================
-// START FOCUS SESSION
-// ======================
 export const startFocusSession = async (
   req: AuthRequest,
   res: Response
@@ -16,24 +13,52 @@ export const startFocusSession = async (
       taskId,
     } = req.body;
 
-    // Validasi
     if (!duration) {
       return res.status(400).json({
         message: "Duration is required",
       });
     }
 
-    const startTime = new Date();
+    const activeSession =
+      await prisma.focusSession.findFirst({
+        where: {
+          userId: req.user!.userId,
+          endTime: {
+            gt: new Date(),
+          },
+        },
 
-    // Hitung end time otomatis
-    const endTime = new Date(
-      startTime.getTime() + duration * 60000
-    );
+        include: {
+          task: true,
+        },
+
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+    if (activeSession) {
+      return res.status(200).json({
+        message:
+          "Active focus session already exists",
+        focusSession:
+          activeSession,
+      });
+    }
+
+    const startTime =
+      new Date();
+
+    const endTime =
+      new Date(
+        startTime.getTime() +
+          Number(duration) * 60000
+      );
 
     const focusSession =
       await prisma.focusSession.create({
         data: {
-          duration,
+          duration: Number(duration),
           startTime,
           endTime,
           userId: req.user!.userId,
@@ -58,15 +83,49 @@ export const startFocusSession = async (
   }
 };
 
-// ======================
-// END FOCUS SESSION
-// ======================
+export const getActiveFocusSession = async (
+  req: AuthRequest,
+  res: Response
+) => {
+  try {
+    const activeSession =
+      await prisma.focusSession.findFirst({
+        where: {
+          userId: req.user!.userId,
+          endTime: {
+            gt: new Date(),
+          },
+        },
+
+        include: {
+          task: true,
+        },
+
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+
+    res.status(200).json({
+      focusSession:
+        activeSession || null,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
 export const endFocusSession = async (
   req: AuthRequest,
   res: Response
 ) => {
   try {
-    const id = req.params.id as string;
+    const id =
+      String(req.params.id);
 
     const session =
       await prisma.focusSession.findFirst({
@@ -78,11 +137,11 @@ export const endFocusSession = async (
 
     if (!session) {
       return res.status(404).json({
-        message: "Focus session not found",
+        message:
+          "Focus session not found",
       });
     }
 
-    // Update end time ke waktu sekarang
     const updatedSession =
       await prisma.focusSession.update({
         where: {
@@ -90,13 +149,20 @@ export const endFocusSession = async (
         },
 
         data: {
-          endTime: new Date(),
+          endTime:
+            new Date(),
+        },
+
+        include: {
+          task: true,
         },
       });
 
     res.status(200).json({
-      message: "Focus session ended",
-      focusSession: updatedSession,
+      message:
+        "Focus session ended",
+      focusSession:
+        updatedSession,
     });
   } catch (error) {
     console.error(error);
@@ -107,9 +173,6 @@ export const endFocusSession = async (
   }
 };
 
-// ======================
-// GET FOCUS HISTORY
-// ======================
 export const getFocusHistory = async (
   req: AuthRequest,
   res: Response

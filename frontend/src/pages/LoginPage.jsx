@@ -1,91 +1,189 @@
-// ========================================
-// FILE: src/pages/LoginPage.jsx
-// ========================================
-
 import {
   useState,
 } from "react";
 
 import {
-  Link,
+  BsStars,
+} from "react-icons/bs";
+
+import {
   useNavigate,
+  Link,
 } from "react-router-dom";
+
+import logo from "../assets/logo.png";
 
 import {
   loginUser,
 } from "../services/authService";
 
+import "../styles/auth.css";
+
 function LoginPage() {
+
   const navigate =
     useNavigate();
 
-  const [email, setEmail] =
+  const [email,
+    setEmail] =
     useState("");
 
-  const [password, setPassword] =
+  const [password,
+    setPassword] =
     useState("");
 
-  const handleLogin = async (
-    e
-  ) => {
-    e.preventDefault();
+  const handleLogin =
+    async (e) => {
 
-    try {
-      const response =
-        await loginUser(
-          email,
-          password
+      e.preventDefault();
+
+      try {
+
+        const response =
+          await loginUser(
+            email,
+            password
+          );
+
+        console.log(
+          "LOGIN RESPONSE:",
+          response
         );
 
-      localStorage.setItem(
-        "token",
-        response.token
-      );
+        localStorage.setItem(
+          "token",
+          response.token
+        );
 
-      navigate("/dashboard");
-    } catch (error) {
-      alert("Login gagal");
-    }
-  };
+        localStorage.setItem(
+          "username",
+          response.user.username
+        );
+
+        localStorage.setItem(
+          "email",
+          response.user.email
+        );
+
+        console.log(
+          "USERNAME:",
+          localStorage.getItem(
+            "username"
+          )
+        );
+
+        console.log(
+          "EMAIL:",
+          localStorage.getItem(
+            "email"
+          )
+        );
+
+        alert(
+          "Login berhasil"
+        );
+
+        navigate(
+          "/dashboard"
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+        alert(
+          "Email atau password salah"
+        );
+
+      }
+    };
 
   return (
-    <div className="container">
-      <h1>Login</h1>
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) =>
-            setEmail(
-              e.target.value
-            )
+    <div className="auth-container">
+
+      <div className="auth-card">
+
+        <div className="auth-header">
+
+          <img
+            src={logo}
+            alt="Logo"
+            className="auth-logo"
+          />
+
+          <h1>
+            Student Task Tracker
+          </h1>
+
+          <p>
+            Turn Chaos Into Clarity
+          </p>
+
+          <p>
+            by Celestial Team
+          </p>
+
+          <span className="auth-subtitle">
+            <BsStars />
+            Welcome back
+          </span>
+
+        </div>
+
+        <form
+          onSubmit={
+            handleLogin
           }
-        />
+          className="auth-form"
+        >
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) =>
-            setPassword(
-              e.target.value
-            )
-          }
-        />
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) =>
+              setEmail(
+                e.target.value
+              )
+            }
+            required
+          />
 
-        <button type="submit">
-          Login
-        </button>
-      </form>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) =>
+              setPassword(
+                e.target.value
+              )
+            }
+            required
+          />
 
-      <p>
-        Belum punya akun?
-        <Link to="/register">
-          Register
-        </Link>
-      </p>
+          <button type="submit">
+
+            Login
+
+          </button>
+
+        </form>
+
+        <div className="auth-footer">
+
+          <p>
+            Belum punya akun?
+          </p>
+
+          <Link to="/register">
+            Register sekarang
+          </Link>
+
+        </div>
+
+      </div>
+
     </div>
   );
 }

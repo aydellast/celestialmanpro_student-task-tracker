@@ -1,24 +1,30 @@
-// ========================================
-// FILE: src/routes/AppRoutes.jsx
-// ========================================
-
 import {
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
 
+import LandingPage from "../pages/LandingPage";
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import DashboardPage from "../pages/DashboardPage";
 import FocusPage from "../pages/FocusPage";
 import CollaborationPage from "../pages/CollaborationPage";
+import TaskPage from "../pages/TaskPage";
+import ProfilePage from "../pages/ProfilePage";
+import WorkspacePage from "../pages/WorkspacePage";
 
 function ProtectedRoute({ children }) {
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token");
 
   if (!token) {
-    return <Navigate to="/" replace />;
+    return (
+      <Navigate
+        to="/login"
+        replace
+      />
+    );
   }
 
   return children;
@@ -27,8 +33,14 @@ function ProtectedRoute({ children }) {
 function AppRoutes() {
   return (
     <Routes>
+
       <Route
         path="/"
+        element={<LandingPage />}
+      />
+
+      <Route
+        path="/login"
         element={<LoginPage />}
       />
 
@@ -42,6 +54,15 @@ function AppRoutes() {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/task"
+        element={
+          <ProtectedRoute>
+            <TaskPage />
           </ProtectedRoute>
         }
       />
@@ -63,6 +84,25 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+
+      <Route
+        path="/workspace/:taskId"
+        element={
+          <ProtectedRoute>
+            <WorkspacePage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        }
+      />
+
     </Routes>
   );
 }

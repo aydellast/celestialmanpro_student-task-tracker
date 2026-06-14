@@ -1,18 +1,19 @@
-// ========================================
-// FILE: src/pages/FocusPage.jsx
-// ========================================
+import MainLayout from
+"../components/layout/MainLayout";
 
-import Navbar from "../components/Navbar";
-
-import FocusTimer from "../components/FocusTimer";
+import FocusTimer from
+"../components/FocusTimer";
 
 function FocusPage() {
+
   return (
-    <div>
-      <Navbar />
+
+    <MainLayout>
 
       <FocusTimer />
-    </div>
+
+    </MainLayout>
+
   );
 }
 

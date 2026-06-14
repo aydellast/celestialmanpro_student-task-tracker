@@ -4,27 +4,34 @@ import {
   startFocusSession,
   endFocusSession,
   getFocusHistory,
+  getActiveFocusSession,
 } from "../controllers/focusController";
 
-import { authMiddleware } from "../middlewares/authMiddleware";
+import {
+  authMiddleware,
+} from "../middlewares/authMiddleware";
 
-const router = express.Router();
+const router =
+  express.Router();
 
-// Start Focus
 router.post(
   "/start",
   authMiddleware,
   startFocusSession
 );
 
-// End Focus
+router.get(
+  "/active",
+  authMiddleware,
+  getActiveFocusSession
+);
+
 router.post(
   "/end/:id",
   authMiddleware,
   endFocusSession
 );
 
-// Get History
 router.get(
   "/history",
   authMiddleware,

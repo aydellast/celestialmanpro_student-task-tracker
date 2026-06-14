@@ -1,0 +1,45 @@
+:root{
+  --primary:#5B8DEF;
+  --secondary:#A7C7FF;
+  --background:#EEF5FF;
+  --card:#FFFFFF;
+
+  --high:#FF7B7B;
+  --medium:#FFD56F;
+  --low:#7ED957;
+
+  --text:#1F2937;
+}
+
+.mobile-container{
+
+  width:100%;
+
+  max-width:1200px;
+
+  min-height:100vh;
+
+  margin:auto;
+
+  background:#EEF5FF;
+
+  position:relative;
+
+  overflow:hidden;
+
+  padding-bottom:120px;
+}
+
+.page-content{
+  padding:
+    90px 20px 100px;
+}
+
+@media(min-width:768px){
+
+  .page-content{
+
+    padding:
+      110px 40px 140px;
+  }
+}

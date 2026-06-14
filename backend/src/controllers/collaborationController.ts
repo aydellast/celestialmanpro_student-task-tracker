@@ -19,7 +19,6 @@ export const joinTaskByCode = async (
       });
     }
 
-    // Cari task berdasarkan kode
     const task = await prisma.task.findUnique({
       where: {
         taskCode,
@@ -32,7 +31,12 @@ export const joinTaskByCode = async (
       });
     }
 
-    // Cek apakah user sudah join
+    if (task.userId === req.user!.userId) {
+      return res.status(400).json({
+        message: "You are the owner of this task",
+      });
+    }
+
     const existingCollaborator =
       await prisma.taskCollaborator.findFirst({
         where: {
@@ -47,7 +51,6 @@ export const joinTaskByCode = async (
       });
     }
 
-    // Tambahkan collaborator
     const collaborator =
       await prisma.taskCollaborator.create({
         data: {
@@ -91,10 +94,35 @@ export const getTaskCollaborators = async (
   try {
     const taskId = req.params.taskId as string;
 
-    // Pastikan task ada
     const task = await prisma.task.findUnique({
       where: {
         id: taskId,
+      },
+
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            email: true,
+          },
+        },
+
+        priority: true,
+
+        collaborators: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                username: true,
+                email: true,
+              },
+            },
+          },
+        },
+
+        focusSessions: true,
       },
     });
 
@@ -104,32 +132,37 @@ export const getTaskCollaborators = async (
       });
     }
 
-    // Ambil collaborator
-    const collaborators =
-      await prisma.taskCollaborator.findMany({
-        where: {
-          taskId,
-        },
+    const isOwner =
+      task.userId === req.user!.userId;
 
-        include: {
-          user: {
-            select: {
-              id: true,
-              username: true,
-              email: true,
-            },
-          },
-        },
+    const isCollaborator =
+      task.collaborators.some(
+        (collaborator) =>
+          collaborator.userId ===
+          req.user!.userId
+      );
+
+    if (!isOwner && !isCollaborator) {
+      return res.status(403).json({
+        message: "You do not have access to this task",
       });
+    }
 
     res.status(200).json({
       task: {
         id: task.id,
         title: task.title,
+        description: task.description,
+        status: task.status,
+        dueDate: task.dueDate,
         taskCode: task.taskCode,
+        sks: task.sks,
+        difficulty: task.difficulty,
+        priority: task.priority,
+        owner: task.user,
       },
 
-      collaborators,
+      collaborators: task.collaborators,
     });
   } catch (error) {
     console.error(error);
